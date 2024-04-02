@@ -1,6 +1,7 @@
 import UserModel from '../core/user_model.js';
 
 let users = [];
+let userModalElement ;
 
 (async () => {
     await getUsers();
@@ -25,7 +26,7 @@ function montarHmltPagina() {
             <td>${user.cidade}</td>
             <td>${user.login}</td>
             <td>
-                <button class="btn btn-success" onclick="abrirModalEditar('${encodeURIComponent(JSON.stringify(user))}')">
+                <button class="btn btn-success" onclick="abrirModalEditar('${index}')">
                     <i class="bi bi-plus-circle"></i> Editar
                 </button>
                 <a href="#" class="btn btn-danger" onclick="removerUsuario('${user.login}')">
@@ -54,10 +55,29 @@ function montarHmltPagina() {
     table.innerHTML = html;
    }
    
-   function abrirModalEditar(userString) {
-    const decodedUserString = decodeURIComponent(userString);
-    const user = JSON.parse(decodedUserString);
-    }
+   function abrirModalEditar(index) {
+        const user = users[index];
+        console.log(user);
+
+        const html = `
+        <div class="modal" tabindex="-1" id="modalEditar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="userform">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar Usuário</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        `;
+
+        document.querySelector('#modalEditarUsuario').innerHTML = html;
+        userModalElement = new bootstrap.Modal(document.getElementById('modalEditar'));
+		userModalElement.show();
+   }
 
    function editarUsuario(login) {
        console.log(`Editar usuário - ${login}`);
@@ -71,8 +91,9 @@ function montarHmltPagina() {
     console.log('Adicionar usuário');
    }
 
+
    // Exportando as funções para o escopo global
-window.editarUsuario = abrirModalEditar;
+window.abrirModalEditar = abrirModalEditar;
 window.editarUsuario = editarUsuario;
 window.removerUsuario = removerUsuario;
 window.adicionarUsuario = adicionarUsuario;
