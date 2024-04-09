@@ -3,6 +3,39 @@ import UserModel from '../core/user_model.js';
 let users = [];
 let userModalElement ;
 
+const htmlModal = `
+<div class="modal" tabindex="-1" id="showModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="userform">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Usuário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Nome</label>
+                        <input type="text" name="nome" id="nome" class="form-control" value=""/>
+                    </div>
+                    <div class="mb-3">
+                        <label>Cidade</label>
+                        <input type="text" name="cidade" id="cidade" class="form-control" value=""/>
+                    </div>
+                    <div class="mb-3">
+                        <label>login</label>
+                        <input type="text" name="login" id="login" class="form-control" value=""/>
+                    </div>
+                 </div>
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+`;
+
 (async () => {
     await getUsers();
     montarHmltPagina();
@@ -59,24 +92,18 @@ function montarHmltPagina() {
         const user = users[index];
         console.log(user);
 
-        const html = `
-        <div class="modal" tabindex="-1" id="modalEditar">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="userform">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Editar Usuário</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        `;
+        document.querySelector('#modalUsuario').innerHTML = htmlModal;
+        
+        document.getElementById('nome').value = `${user.nome}`;
+        document.getElementById('cidade').value = `${user.cidade}`;
+        document.getElementById('login').value = `${user.login}`;
+        
+        showModal();
+   }
 
-        document.querySelector('#modalEditarUsuario').innerHTML = html;
-        userModalElement = new bootstrap.Modal(document.getElementById('modalEditar'));
-		userModalElement.show();
+   function showModal() {
+        userModalElement = new bootstrap.Modal(document.getElementById('showModal'));
+        userModalElement.show();
    }
 
    function editarUsuario(login) {
