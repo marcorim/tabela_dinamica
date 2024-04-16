@@ -9,7 +9,7 @@ const htmlModal = `
         <div class="modal-content">
             <form id="userform">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar Usuário</h5>
+                    <h5 id="titulo-modal" class="modal-title"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                  </div>
                  <div class="modal-body">
@@ -28,7 +28,7 @@ const htmlModal = `
                  </div>
                  <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Confirmar</button>
+                    <button type="button" id="confirmar" class="btn btn-primary">Confirmar</button>
                 </div>
             </form>
         </div>
@@ -59,7 +59,7 @@ function montarHmltPagina() {
             <td>${user.cidade}</td>
             <td>${user.login}</td>
             <td>
-                <button class="btn btn-success" onclick="abrirModalEditar('${index}')">
+                <button class="btn btn-success" onclick="modalEditarUsuario('${index}')">
                     <i class="bi bi-plus-circle"></i> Editar
                 </button>
                 <a href="#" class="btn btn-danger" onclick="removerUsuario('${user.login}')">
@@ -88,15 +88,34 @@ function montarHmltPagina() {
     table.innerHTML = html;
    }
    
-   function abrirModalEditar(index) {
+   function modalAdicionarUsuario() {
+        document.querySelector('#modalUsuario').innerHTML = htmlModal;
+        document.getElementById('titulo-modal').innerHTML = `Adicionar usuário`;
+
+        showModal();
+   }
+
+   function modalEditarUsuario(index) {
         const user = users[index];
         console.log(user);
 
         document.querySelector('#modalUsuario').innerHTML = htmlModal;
-        
+        document.getElementById('titulo-modal').innerHTML = `Editar usuário`;
+
         document.getElementById('nome').value = `${user.nome}`;
         document.getElementById('cidade').value = `${user.cidade}`;
         document.getElementById('login').value = `${user.login}`;
+
+        document.getElementById('confirmar').addEventListener('click', function() {
+            users[index].nome = document.getElementById('nome').value;
+            users[index].cidade = document.getElementById('cidade').value;
+            users[index].login = document.getElementById('login').value;
+
+            document.getElementById('table').innerHTML = '';
+            montarHmltPagina();
+
+            userModalElement.hide();
+        });
         
         showModal();
    }
@@ -120,10 +139,10 @@ function montarHmltPagina() {
 
 
    // Exportando as funções para o escopo global
-window.abrirModalEditar = abrirModalEditar;
+window.modalEditarUsuario = modalEditarUsuario;
 window.editarUsuario = editarUsuario;
 window.removerUsuario = removerUsuario;
-window.adicionarUsuario = adicionarUsuario;
+window.modalAdicionarUsuario = modalAdicionarUsuario;
 
 // const result = [
    // Monalisa_Atsoc
